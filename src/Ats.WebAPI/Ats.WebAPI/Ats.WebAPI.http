@@ -1,0 +1,6 @@
+@Ats.WebAPI_HostAddress = http://localhost:5122
+
+GET {{Ats.WebAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
