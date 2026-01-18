@@ -15,7 +15,7 @@ public abstract class Entity
         IsDeleted = false;
     }
 
-    public void Delete()
+    public void Deactivate()
     {
         IsDeleted = true;
         DeletedAt = DateTime.UtcNow;
