@@ -1,0 +1,11 @@
+<po-page-edit 
+  [p-title]="title" 
+  (p-save)="save()"
+  (p-cancel)="cancel()">
+
+  <po-dynamic-form 
+    #dynamicForm
+    [p-fields]="fields"
+    [p-value]="candidate"> </po-dynamic-form>
+
+</po-page-edit>

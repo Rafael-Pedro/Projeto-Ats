@@ -1,0 +1,14 @@
+<po-page-list 
+  p-title="Candidatos" 
+  p-subtitle="Gerencie os currículos e perfis dos candidatos"
+  [p-actions]="pageActions">
+
+<po-table
+  [p-loading]="isLoading"
+  [p-columns]="columns"
+  [p-items]="candidates"
+  [p-actions]="tableActions"
+  [p-actions-right]="true">
+ </po-table>
+
+</po-page-list>
