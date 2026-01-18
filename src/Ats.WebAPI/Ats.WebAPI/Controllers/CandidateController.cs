@@ -9,17 +9,17 @@ namespace Ats.WebAPI.Controllers;
 [Route("api/candidates")]
 public class CandidateController : ControllerBase
 {
-    private readonly IMediator _mediator;
+    private readonly ISender _sender;
 
-    public CandidateController(IMediator mediator)
+    public CandidateController(ISender mediator)
     {
-        _mediator = mediator;
+        _sender = mediator;
     }
 
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateCandidateCommand request)
     {
-        var result = await _mediator.Send(request);
+        var result = await _sender.Send(request);
 
         return HttpSerialization.Serialize(result);
     }
@@ -28,7 +28,7 @@ public class CandidateController : ControllerBase
     public async Task<IActionResult> GetById([FromRoute] Guid id)
     {
         var query = new GetCandidateByIdQuery(id);
-        var result = await _mediator.Send(query);
+        var result = await _sender.Send(query);
 
         return HttpSerialization.Serialize(result);
     }
@@ -37,7 +37,7 @@ public class CandidateController : ControllerBase
     public async Task<IActionResult> GetAll([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
     {
         var query = new GetAllCandidatesQuery(page, pageSize);
-        var result = await _mediator.Send(query);
+        var result = await _sender.Send(query);
 
         return HttpSerialization.Serialize(result);
     }
@@ -48,7 +48,7 @@ public class CandidateController : ControllerBase
         if (id != request.Id)
             return BadRequest("O ID da URL não coincide com o ID do corpo da requisição.");
 
-        var result = await _mediator.Send(request);
+        var result = await _sender.Send(request);
 
         return HttpSerialization.Serialize(result);
     }
@@ -56,7 +56,7 @@ public class CandidateController : ControllerBase
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
-        var result = await _mediator.Send(new DeleteCandidateCommand(id));
+        var result = await _sender.Send(new DeleteCandidateCommand(id));
 
         return HttpSerialization.Serialize(result);
     }
