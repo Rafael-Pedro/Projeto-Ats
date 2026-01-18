@@ -36,7 +36,7 @@ public class CadidateRepository : ICandidateRepository
 
         return new PagedResult<Candidate>(items, totalCount, page, pageSize);
     }
-    public async Task<Candidate> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<Candidate?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var candidate = await _collection
                     .Find(c => c.Id == id && !c.IsDeleted)
