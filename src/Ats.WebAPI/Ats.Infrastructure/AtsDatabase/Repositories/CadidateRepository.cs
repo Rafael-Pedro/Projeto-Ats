@@ -34,6 +34,7 @@ public class CadidateRepository : ICandidateRepository
 
     public async Task UpdateAsync(Candidate candidate)
     {
-        await _collection.ReplaceOneAsync(c => c.Id == candidate.Id, candidate);
+        var filter = Builders<Candidate>.Filter.Eq(c => c.Id, candidate.Id);
+        await _collection.ReplaceOneAsync(filter, candidate, new ReplaceOptions { IsUpsert = false });
     }
 }
