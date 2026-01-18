@@ -7,14 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentResults" Version="4.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\Ats.Application\Ats.Application.csproj" />
     <ProjectReference Include="..\Ats.Infrastructure\Ats.Infrastructure.csproj" />
   </ItemGroup>
 
