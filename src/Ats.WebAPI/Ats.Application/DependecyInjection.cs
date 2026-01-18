@@ -1,5 +1,5 @@
-﻿using Ats.Application.Behaviours;
-using Mediator;
+﻿using Mediator;
+using Ats.Application.Behaviours;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Ats.Application;
@@ -16,7 +16,7 @@ public static class DependecyInjection
 
         services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehaviour<,>));
         services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ExceptionHandlingBehaviour<,>));
-        services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
+        services.AddScoped(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehaviour<,>));
 
         return services;
     }
