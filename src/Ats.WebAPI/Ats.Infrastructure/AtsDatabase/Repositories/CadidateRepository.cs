@@ -38,9 +38,11 @@ public class CadidateRepository : ICandidateRepository
     }
     public async Task<Candidate> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await _collection
+        var candidate = await _collection
                     .Find(c => c.Id == id && !c.IsDeleted)
                     .FirstOrDefaultAsync(cancellationToken);
+
+        return candidate;
     }
 
     public async Task UpdateAsync(Candidate candidate)
