@@ -1,12 +1,38 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
+import {
+  PoMenuItem,
+  PoMenuModule,
+  PoPageModule,
+  PoToolbarModule,
+} from '@po-ui/ng-components';
+
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [
+    CommonModule,
+    RouterOutlet,
+    PoToolbarModule,
+    PoMenuModule,
+    PoPageModule
+  ],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-  title = 'ats-frontend';
+  readonly menus: Array<PoMenuItem> = [
+    {
+      label: 'Home',
+      link: '/',
+      icon: 'po-icon-home'
+    },
+    {
+      label: 'Candidatos',
+      link: '/candidates',
+      icon: 'po-icon-user',
+      shortLabel: 'Candidatos'
+    }
+  ];
 }
