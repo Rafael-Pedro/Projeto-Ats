@@ -5,9 +5,9 @@ using static Ats.Domain.Entities.Candidate;
 
 namespace Ats.Application.UseCases.Candidates;
 
-public record DeleteCandidateCommand(Guid Id) : IRequest<Result>;
+public record DisableCandidateCommand(Guid Id) : IRequest<Result>;
 
-public class DeleteCandidateCommandHandler : IRequestHandler<DeleteCandidateCommand, Result>
+public class DeleteCandidateCommandHandler : IRequestHandler<DisableCandidateCommand, Result>
 {
     private readonly ICandidateRepository _candidateRepository;
 
@@ -16,7 +16,7 @@ public class DeleteCandidateCommandHandler : IRequestHandler<DeleteCandidateComm
         _candidateRepository = candidateRepository;
     }
 
-    public async ValueTask<Result> Handle(DeleteCandidateCommand request, CancellationToken cancellationToken)
+    public async ValueTask<Result> Handle(DisableCandidateCommand request, CancellationToken cancellationToken)
     {
         var candidate = await _candidateRepository.GetByIdAsync(request.Id, cancellationToken);
         if (candidate is null)

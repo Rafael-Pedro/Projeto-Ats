@@ -54,9 +54,9 @@ public class CandidateController : ControllerBase
     }
 
     [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> Delete([FromRoute] Guid id)
+    public async Task<IActionResult> Disable([FromRoute] Guid id)
     {
-        var result = await _sender.Send(new DeleteCandidateCommand(id));
+        var result = await _sender.Send(new DisableCandidateCommand(id));
 
         return HttpSerialization.Serialize(result);
     }
