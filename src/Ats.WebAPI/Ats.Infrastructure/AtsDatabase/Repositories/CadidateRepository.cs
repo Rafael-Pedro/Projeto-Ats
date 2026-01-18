@@ -1,4 +1,5 @@
-﻿using Ats.Domain.Entities;
+﻿using Ats.Domain.Common;
+using Ats.Domain.Entities;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using static Ats.Domain.Entities.Candidate;
@@ -20,11 +21,21 @@ public class CadidateRepository : ICandidateRepository
         await _collection.InsertOneAsync(candidate, null, cancellationToken);
     }
 
-    public async Task<IEnumerable<Candidate>> GetAllAsync()
+    public async Task<PagedResult<Candidate>> GetAllPaginatedAsync(int page, int pageSize, CancellationToken ct = default)
     {
-        return await _collection.Find(c => !c.IsDeleted).ToListAsync();
-    }
+        var filter = Builders<Candidate>.Filter.Eq(c => c.IsDeleted, false);
 
+        var totalCount = await _collection.CountDocumentsAsync(filter, cancellationToken: ct);
+
+        var skip = (page - 1) * pageSize;
+
+        var items = await _collection.Find(filter)
+                                     .Skip(skip)
+                                     .Limit(pageSize)
+                                     .ToListAsync(ct);
+
+        return new PagedResult<Candidate>(items, totalCount, page, pageSize);
+    }
     public async Task<Candidate> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return await _collection

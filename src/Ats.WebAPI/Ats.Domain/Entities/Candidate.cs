@@ -1,4 +1,6 @@
-﻿namespace Ats.Domain.Entities;
+﻿using Ats.Domain.Common;
+
+namespace Ats.Domain.Entities;
 
 public class Candidate : Entity
 {
@@ -17,7 +19,7 @@ public class Candidate : Entity
 
         if (!email.Contains('@'))
             throw new ArgumentException("E-mail inválido.", nameof(email));
-        
+
         Name = name;
         Email = email;
         Age = age;
@@ -37,6 +39,6 @@ public class Candidate : Entity
         Task AddAsync(Candidate candidate, CancellationToken cancellationToken = default);
         Task UpdateAsync(Candidate candidate);
         Task<Candidate> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
-        Task<IEnumerable<Candidate>> GetAllAsync();
+        Task<PagedResult<Candidate>> GetAllPaginatedAsync(int page, int pageSize, CancellationToken ct = default);
     }
 }
