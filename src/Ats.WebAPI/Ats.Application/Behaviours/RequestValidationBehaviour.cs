@@ -1,5 +1,4 @@
-﻿using Application.FluentResultsExtensions;
-using Ats.Application.FluentResultExtensions;
+﻿using Ats.Application.FluentResultExtensions;
 using FluentResults;
 using FluentValidation;
 using Mediator;
