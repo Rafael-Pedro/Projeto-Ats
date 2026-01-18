@@ -1,5 +1,4 @@
 ﻿using Ats.Application.FluentResultExtensions;
-using Ats.Domain.Entities;
 using FluentResults;
 using Mediator;
 using static Ats.Domain.Entities.Candidate;
@@ -26,7 +25,7 @@ public class UpdateCandidateCommandHandler : IRequestHandler<UpdateCandidateComm
     public async ValueTask<Result> Handle(UpdateCandidateCommand request, CancellationToken cancellationToken)
     {
         var candidate = await _candidateRepository.GetByIdAsync(request.Id, cancellationToken);
-        if (candidate is null) 
+        if (candidate is null)
             return Result.Fail(new NotFoundError("Candidato não encontrado"));
 
         candidate.UpdateInfo(
