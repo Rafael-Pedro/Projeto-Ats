@@ -26,9 +26,10 @@ public class Candidate : Entity
         Resume = resume;
     }
 
-    public void UpdateInfo(string name, int age, string? resume)
+    public void UpdateInfo(string name, string email, int age, string? resume)
     {
         Name = name;
+        Email = email;
         Age = age;
         Resume = resume;
         UpdateTimestamp();
