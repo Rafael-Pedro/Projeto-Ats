@@ -7,11 +7,11 @@ namespace Ats.Application.UseCases.Candidates;
 
 public record DisableCandidateCommand(Guid Id) : IRequest<Result>;
 
-public class DeleteCandidateCommandHandler : IRequestHandler<DisableCandidateCommand, Result>
+public class DisableCandidateCommandHandler : IRequestHandler<DisableCandidateCommand, Result>
 {
     private readonly ICandidateRepository _candidateRepository;
 
-    public DeleteCandidateCommandHandler(ICandidateRepository candidateRepository)
+    public DisableCandidateCommandHandler(ICandidateRepository candidateRepository)
     {
         _candidateRepository = candidateRepository;
     }
