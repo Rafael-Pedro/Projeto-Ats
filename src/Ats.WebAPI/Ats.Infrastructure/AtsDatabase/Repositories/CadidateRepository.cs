@@ -1,27 +1,39 @@
 ﻿using Ats.Domain.Entities;
+using Microsoft.Extensions.Options;
+using MongoDB.Driver;
 using static Ats.Domain.Entities.Candidate;
 
 namespace Ats.Infrastructure.AtsDatabase.Repositories;
 
-internal class CadidateRepository : ICandidateRepository
+public class CadidateRepository : ICandidateRepository
 {
-    public Task AddAsync(Candidate candidate, CancellationToken cancellationToken = default)
+    private readonly IMongoCollection<Candidate> _collection;
+
+    public CadidateRepository(IMongoClient client, IOptions<MongoSettings> options)
     {
-        throw new NotImplementedException();
+        var db = client.GetDatabase(options.Value.DatabaseName);
+        _collection = db.GetCollection<Candidate>("candidates");
     }
 
-    public Task<IEnumerable<Candidate>> GetAllAsync()
+    public async Task AddAsync(Candidate candidate, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        await _collection.InsertOneAsync(candidate, null, cancellationToken);
     }
 
-    public Task<Candidate> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<Candidate>> GetAllAsync()
     {
-        throw new NotImplementedException();
+        return await _collection.Find(c => !c.IsDeleted).ToListAsync();
     }
 
-    public Task UpdateAsync(Candidate candidate)
+    public async Task<Candidate> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        return await _collection
+                    .Find(c => c.Id == id && !c.IsDeleted)
+                    .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public async Task UpdateAsync(Candidate candidate)
+    {
+        await _collection.ReplaceOneAsync(c => c.Id == candidate.Id, candidate);
     }
 }
