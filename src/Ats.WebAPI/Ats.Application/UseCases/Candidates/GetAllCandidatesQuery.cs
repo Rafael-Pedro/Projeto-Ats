@@ -27,7 +27,9 @@ public class GetAllCandidatesQueryHandler : IRequestHandler<GetAllCandidatesQuer
             candidate.Name,
             candidate.Email,
             candidate.Age,
-            candidate.Resume
+            candidate.Resume,
+            candidate.CreatedAt,
+            candidate.IsDeleted
         ));
 
         var response = new PagedResult<GetAllCandidatesQueryResponse>(
@@ -46,5 +48,7 @@ public record GetAllCandidatesQueryResponse(
     string Name,
     string Email,
     int Age,
-    string? Resume
+    string? Resume,
+    DateTime CreatedAt,
+    bool IsDeleted
 );
