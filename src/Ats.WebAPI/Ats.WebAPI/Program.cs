@@ -1,4 +1,5 @@
 
+using Ats.Application;
 using Ats.Infrastructure;
 using Ats.Infrastructure.AtsDatabase;
 
@@ -11,6 +12,7 @@ builder.Services
     .ValidateOnStart();
 
 builder.Services.AddInfrastructure();
+builder.Services.AddApplication();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
