@@ -1,0 +1,38 @@
+services:
+  # 1. Banco de Dados
+  mongo:
+    image: mongo:latest
+    container_name: ats_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  # 2. Backend
+  api:
+    build:
+      context: ./src/Ats.WebAPI
+      dockerfile: Dockerfile
+    container_name: ats_api
+    depends_on:
+      - mongo
+    ports:
+      - "5000:8080"
+    environment:
+      - MongoSettings__ConnectionString=mongodb://mongo:27017
+      - MongoSettings__DatabaseName=AtsDatabase
+      - ASPNETCORE_URLS=http://+:8080
+
+  # 3. Frontend
+  frontend:
+    build:
+      context: ./src/ats-frontend
+      dockerfile: Dockerfile
+    container_name: ats_frontend
+    depends_on:
+      - api
+    ports:
+      - "4200:80"
+
+volumes:
+  mongo_data:
