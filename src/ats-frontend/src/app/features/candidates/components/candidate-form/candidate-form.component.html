@@ -6,6 +6,25 @@
   <po-dynamic-form 
     #dynamicForm
     [p-fields]="fields"
-    [p-value]="candidate"> </po-dynamic-form>
+    [p-value]="candidate"> 
+  </po-dynamic-form>
+
+  <div class="po-row">
+    <div class="po-row">
+  <po-upload
+    class="po-md-12"
+    name="resumeFile"
+    [ngModel]="uploadFiles"
+    (ngModelChange)="onFileChange($event)"
+    p-label="Currículo (PDF ou DOCX)"
+    p-help="Anexe o arquivo do currículo aqui."
+    [p-auto-upload]="false"
+    [p-multiple]="false"
+    [p-restrictions]="{ allowedExtensions: ['.pdf', '.doc', '.docx'] }"
+    [p-hide-send-button]="true"
+    p-url="no-endpoint"> 
+  </po-upload>
+</div>
+  </div>
 
 </po-page-edit>

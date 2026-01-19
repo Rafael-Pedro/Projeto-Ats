@@ -1,15 +1,15 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { 
-  PoPageModule, 
-  PoTableModule, 
-  PoTableAction, 
-  PoTableColumn, 
+import {
+  PoPageModule,
+  PoTableModule,
+  PoTableAction,
+  PoTableColumn,
   PoPageAction,
   PoDialogService,
   PoNotificationService,
-   PoButtonModule
+  PoButtonModule
 } from '@po-ui/ng-components';
 import { CandidateService } from '../../../../core/services/candidate.service';
 import { Candidate } from '../../../../core/models/candidate.model';
@@ -28,7 +28,7 @@ export class CandidateListComponent implements OnInit {
 
   candidates: Array<Candidate> = [];
   isLoading = false;
-  
+
   page = 1;
   readonly pageSize = 10;
   hasNext = false;
@@ -46,7 +46,28 @@ export class CandidateListComponent implements OnInit {
     { property: 'name', label: 'Nome' },
     { property: 'email', label: 'E-mail' },
     { property: 'age', label: 'Idade', type: 'number' },
-    { property: 'createdAt', label: 'Data de Cadastro', type: 'date' }
+
+    {
+      property: 'linkedIn',
+      label: 'LinkedIn',
+      type: 'link'
+    },
+    {
+      property: 'resumeFileName',
+      label: 'Arquivo',
+      type: 'string'
+    },
+
+    { property: 'createdAt', label: 'Criado em', type: 'date' },
+    {
+      property: 'status',
+      type: 'label',
+      width: '8%',
+      labels: [
+        { value: 'active', color: 'color-10', label: 'Ativo' },
+        { value: 'disabled', color: 'color-07', label: 'Inativo' }
+      ]
+    }
   ];
 
   ngOnInit() {
@@ -55,7 +76,7 @@ export class CandidateListComponent implements OnInit {
 
   loadData(isShowMore: boolean = false) {
     this.isLoading = true;
-    
+
     if (!isShowMore) {
       this.page = 1;
     }
@@ -69,7 +90,7 @@ export class CandidateListComponent implements OnInit {
         }
 
         this.hasNext = this.candidates.length < res.totalCount;
-        
+
         this.isLoading = false;
       },
       error: () => {
@@ -84,11 +105,11 @@ export class CandidateListComponent implements OnInit {
     this.loadData(true);
   }
 
-  private onCreate() { 
-    this.router.navigate(['/candidates/new']); 
+  private onCreate() {
+    this.router.navigate(['/candidates/new']);
   }
 
-  private onEdit(item: Candidate) { 
+  private onEdit(item: Candidate) {
     this.router.navigate(['/candidates/edit', item.id]);
   }
 
@@ -105,7 +126,7 @@ export class CandidateListComponent implements OnInit {
     this.candidateService.disable(id).subscribe({
       next: () => {
         this.poNotification.success('Candidato inativado com sucesso!');
-        this.loadData(false); 
+        this.loadData(false);
       },
       error: () => {
         this.isLoading = false;

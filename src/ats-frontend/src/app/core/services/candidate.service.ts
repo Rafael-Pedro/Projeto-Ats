@@ -22,7 +22,7 @@ export class CandidateService {
             .set('page', page.toString())
             .set('pageSize', pageSize.toString());
 
-        let response =  this._http.get<PagedResult<Candidate>>(this._apiUrl, { params });
+        let response = this._http.get<PagedResult<Candidate>>(this._apiUrl, { params });
         return response;
     }
 
@@ -31,19 +31,36 @@ export class CandidateService {
         return response;
     }
 
-    create(candidate: any): Observable<Candidate> {
-        let response = this._http.post<Candidate>(this._apiUrl, candidate);
-        return response;
+    create(candidate: any, file: File | null): Observable<void> {
+        const formData = this.toFormData(candidate, file);
+        return this._http.post<void>(this._apiUrl, formData);
     }
 
-    update(id: string, candidate: any): Observable<void> {
-        const payload = { ...candidate, id };
-        let response = this._http.put<void>(`${this._apiUrl}/${id}`, payload);
-        return response;
+    update(id: string, candidate: any, file: File | null): Observable<void> {
+        const formData = this.toFormData(candidate, file);
+        return this._http.put<void>(`${this._apiUrl}/${id}`, formData);
     }
 
     disable(id: string): Observable<void> {
         let response = this._http.delete<void>(`${this._apiUrl}/${id}`);
         return response;
     }
+
+    private toFormData(candidate: any, file: File | null): FormData {
+    const formData = new FormData();
+
+    formData.append('name', candidate.name);
+    formData.append('email', candidate.email);
+    formData.append('age', candidate.age.toString());
+    
+    if (candidate.linkedIn) {
+      formData.append('linkedIn', candidate.linkedIn);
+    }
+
+    if (file) {
+      formData.append('resumeFile', file); 
+    }
+
+    return formData;
+  }
 }
