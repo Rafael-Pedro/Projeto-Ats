@@ -1,5 +1,4 @@
-﻿using Ats.Domain.Common;
-using Ats.Domain.Exceptions;
+﻿using Ats.Domain.Exceptions;
 
 namespace Ats.Domain.Entities;
 
