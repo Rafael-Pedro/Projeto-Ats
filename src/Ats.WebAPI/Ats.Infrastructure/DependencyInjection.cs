@@ -1,4 +1,5 @@
-﻿using Ats.Infrastructure.AtsDatabase;
+﻿using Ats.Domain.Interfaces;
+using Ats.Infrastructure.AtsDatabase;
 using Ats.Infrastructure.AtsDatabase.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -6,7 +7,6 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
-using static Ats.Domain.Entities.Candidate;
 
 namespace Ats.Infrastructure;
 
@@ -24,6 +24,8 @@ public static class DependencyInjection
         });
 
         services.AddScoped<ICandidateRepository, CadidateRepository>();
+        services.AddScoped<IJobRepository, JobRepository>();
+        services.AddScoped<IJobApplicationRepository, JobApplicationRepository>();
 
         return services;
     }
