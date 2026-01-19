@@ -38,4 +38,11 @@ public class JobApplicationsController : ControllerBase
         var result = await _sender.Send(query);
         return HttpSerialization.Serialize(result);
     }
+
+    [HttpPatch("{id:guid}/status")]
+    public async Task<IActionResult> ChangeStatus([FromRoute] Guid id, [FromBody] string action)
+    {
+        var result = await _sender.Send(new ChangeApplicationStatusCommand(id, action));
+        return HttpSerialization.Serialize(result);
+    }
 }

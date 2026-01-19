@@ -1,20 +1,26 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { 
-  PoPageModule, 
-  PoTableModule, 
-  PoTableColumn, 
+import {
+  PoPageModule,
+  PoTableModule,
+  PoTableColumn,
   PoBreadcrumb,
   PoNotificationService,
-  PoButtonModule
+  PoButtonModule,
+  PoTableAction
 } from '@po-ui/ng-components';
 import { JobApplicationService, ApplicationResponse } from '../../../../core/services/job-application.service';
+import { ApplicationStatus } from '../../../../core/enums/application-status.enum';
 
 @Component({
   selector: 'app-job-applicants',
   standalone: true,
-  imports: [CommonModule, PoPageModule, PoTableModule, PoButtonModule],
+  imports: [
+    CommonModule,
+    PoPageModule,
+    PoTableModule,
+    PoButtonModule],
   templateUrl: './job-applicants.component.html'
 })
 export class JobApplicantsComponent implements OnInit {
@@ -38,19 +44,75 @@ export class JobApplicantsComponent implements OnInit {
     { property: 'candidateName', label: 'Nome' },
     { property: 'candidateEmail', label: 'E-mail' },
     { property: 'appliedAt', label: 'Data Aplicação', type: 'date' },
-    { 
-      property: 'status', 
-      label: 'Status', 
+    {
+      property: 'status',
+      label: 'Status',
       type: 'label',
       labels: [
-        { value: 0, color: 'color-07', label: 'Inscrito' },
-        { value: 1, color: 'color-01', label: 'Em Análise' },
-        { value: 2, color: 'color-08', label: 'Entrevista' },
-        { value: 3, color: 'color-10', label: 'Contratado' },
-        { value: 4, color: 'color-07', label: 'Reprovado' }
+        {
+          value: ApplicationStatus.Applied,
+          color: 'color-01',
+          label: 'Inscrito'
+        },
+        {
+          value: ApplicationStatus.Reviewing,
+          color: 'color-05',
+          label: 'Em Análise'
+        },
+        {
+          value: ApplicationStatus.Interviewing,
+          color: 'color-08',
+          label: 'Entrevista'
+        },
+        {
+          value: ApplicationStatus.Rejected,
+          color: 'color-07',
+          label: 'Reprovado'
+        },
+        {
+          value: ApplicationStatus.Hired,
+          color: 'color-10',
+          label: 'Contratado'
+        }
       ]
     }
   ];
+
+  readonly tableActions: Array<PoTableAction> = [
+    {
+      label: 'Marcar Entrevista',
+      icon: 'po-icon-calendar',
+      action: (row: ApplicationResponse) => this.updateStatus(row.applicationId, 'interview'),
+
+      visible: (row: ApplicationResponse) =>
+        row.status === ApplicationStatus.Applied ||
+        row.status === ApplicationStatus.Reviewing
+    },
+    {
+      label: 'Reprovar Candidato',
+      icon: 'po-icon-close',
+      type: 'danger',
+      action: (row: ApplicationResponse) => this.updateStatus(row.applicationId, 'reject'),
+
+      visible: (row: ApplicationResponse) =>
+        row.status !== ApplicationStatus.Hired &&
+        row.status !== ApplicationStatus.Rejected
+    }
+  ];
+
+  updateStatus(id: string, action: 'interview' | 'reject') {
+    this.isLoading = true;
+    this.applicationService.changeStatus(id, action).subscribe({
+      next: () => {
+        this.poNotification.success('Status atualizado com sucesso!');
+        this.loadData(this.jobId!);
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.poNotification.error(err.error?.detail || 'Erro ao mudar status');
+      }
+    });
+  }
 
   ngOnInit() {
     this.jobId = this.route.snapshot.paramMap.get('id');

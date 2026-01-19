@@ -2,13 +2,14 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { ApplicationStatus } from '../enums/application-status.enum';
 
 export interface ApplicationResponse {
     applicationId: string;
     candidateId: string;
     candidateName: string;
     candidateEmail: string;
-    status: number;
+    status: ApplicationStatus;
     appliedAt: string;
 }
 
@@ -25,5 +26,11 @@ export class JobApplicationService {
 
     getCandidatesByJob(jobId: string): Observable<ApplicationResponse[]> {
         return this._http.get<ApplicationResponse[]>(`${this._apiUrl}/job/${jobId}`);
+    }
+
+    changeStatus(applicationId: string, action: 'interview' | 'reject'): Observable<void> {
+        return this._http.patch<void>(`${this._apiUrl}/${applicationId}/status`, `"${action}"`, {
+            headers: { 'Content-Type': 'application/json' }
+        });
     }
 }

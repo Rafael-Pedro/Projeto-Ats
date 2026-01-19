@@ -185,8 +185,6 @@ export class JobListComponent implements OnInit {
   }
 
 private onViewApplicants(row: Job) {
-  console.log('Botão clicado! Dados da linha:', row);
-
   if (!row || !row.id) {
     this.poNotification.error('Erro: ID da vaga não encontrado.');
     return;

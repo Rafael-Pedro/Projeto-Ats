@@ -2,14 +2,16 @@
   p-title="Candidatos Inscritos"
   [p-breadcrumb]="breadcrumb">
 
-  <po-table
-    [p-loading]="isLoading"
-    [p-items]="applicants"
-    [p-columns]="columns"
-    [p-hide-columns-manager]="true"
-    [p-striped]="true">
-  </po-table>
-
+<po-table
+  [p-loading]="isLoading"
+  [p-items]="applicants"
+  [p-columns]="columns"
+  [p-actions]="tableActions"
+  [p-actions-right]="true"
+  [p-hide-columns-manager]="true"
+  [p-striped]="true">
+</po-table>
+  
   <div class="po-row po-mt-2" *ngIf="!isLoading && applicants.length === 0">
     <div class="po-md-12 po-text-center">
       <p>Nenhum candidato se inscreveu nesta vaga ainda.</p>
