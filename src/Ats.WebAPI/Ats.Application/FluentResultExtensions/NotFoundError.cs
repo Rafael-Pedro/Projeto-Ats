@@ -1,3 +1,5 @@
-﻿namespace Ats.Application.FluentResultExtensions;
+﻿using FluentResults;
 
-public class NotFoundError(string message) : ApplicationError(message);
+namespace Ats.Application.FluentResultExtensions;
+
+public class NotFoundError(string message) : Error(message);
