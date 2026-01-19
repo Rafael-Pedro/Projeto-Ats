@@ -89,7 +89,7 @@ export class JobListComponent implements OnInit {
       icon: 'po-icon-delete',
       visible: (row: Job) => this.isRecruiter
     }
-];
+  ];
 
   readonly columns: Array<PoTableColumn> = [
     { property: 'title', label: 'Título' },
@@ -184,14 +184,14 @@ export class JobListComponent implements OnInit {
     });
   }
 
-private onViewApplicants(row: Job) {
-  if (!row || !row.id) {
-    this.poNotification.error('Erro: ID da vaga não encontrado.');
-    return;
-  }
+  private onViewApplicants(row: Job) {
+    if (!row || !row.id) {
+      this.poNotification.error('Erro: ID da vaga não encontrado.');
+      return;
+    }
 
-  this.router.navigate(['/jobs', row.id, 'applicants']);
-}
+    this.router.navigate(['/jobs', row.id, 'applicants']);
+  }
 
   onShowMore() {
     this.page++;
@@ -203,17 +203,24 @@ private onViewApplicants(row: Job) {
   }
 
   private onEdit(item: Job) {
-    // this.router.navigate(['/jobs/edit', item.id]);
+    this.router.navigate(['/jobs/edit', item.id]);
   }
 
   private onDelete(item: Job) {
     this.poDialog.confirm({
       title: 'Excluir Vaga',
-      message: `Tem certeza que deseja excluir a vaga ${item.title}?`,
+      message: `Tem certeza que deseja excluir a vaga "${item.title}"? Esta ação não pode ser desfeita.`,
       confirm: () => {
-        this.jobService.delete(item.id).subscribe(() => {
-          this.poNotification.success('Vaga excluída');
-          this.loadData();
+        this.isLoading = true;
+        this.jobService.delete(item.id).subscribe({
+          next: () => {
+            this.poNotification.success('Vaga excluída com sucesso.');
+            this.loadData();
+          },
+          error: (err) => {
+            this.isLoading = false;
+            this.poNotification.error(err.error?.detail || 'Erro ao excluir vaga.');
+          }
         });
       }
     });

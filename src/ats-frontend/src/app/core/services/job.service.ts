@@ -28,4 +28,12 @@ export class JobService {
   create(job: any): Observable<void> {
     return this._http.post<void>(this._apiUrl, job);
   }
+
+  getById(id: string): Observable<Job> {
+    return this._http.get<Job>(`${this._apiUrl}/${id}`);
+  }
+
+  update(id: string, job: any): Observable<void> {
+    return this._http.put<void>(`${this._apiUrl}/${id}`, job);
+  }
 }
