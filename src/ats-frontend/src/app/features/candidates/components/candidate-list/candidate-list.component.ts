@@ -29,10 +29,9 @@ export class CandidateListComponent implements OnInit {
   candidates: Array<Candidate> = [];
   isLoading = false;
   
-  // 1. Variáveis de Controle de Paginação
   page = 1;
   readonly pageSize = 10;
-  hasNext = false; // Controla se o botão "Carregar Mais" deve aparecer
+  hasNext = false;
 
   readonly pageActions: Array<PoPageAction> = [
     { label: 'Novo Candidato', action: () => this.onCreate(), icon: 'po-icon-user-add' }
@@ -51,30 +50,24 @@ export class CandidateListComponent implements OnInit {
   ];
 
   ngOnInit() {
-    // Carrega a primeira página
     this.loadData();
   }
 
-  // 2. Método ajustado para suportar paginação
   loadData(isShowMore: boolean = false) {
     this.isLoading = true;
     
-    // Se NÃO for "Carregar Mais", reseta para a página 1 (ex: após excluir ou iniciar)
     if (!isShowMore) {
       this.page = 1;
     }
 
     this.candidateService.getAll(this.page, this.pageSize).subscribe({
       next: (res) => {
-        // Se for paginação, ADICIONA ao final da lista. Se for refresh, SUBSTITUI a lista.
         if (isShowMore) {
           this.candidates = [...this.candidates, ...res.items];
         } else {
           this.candidates = res.items;
         }
 
-        // Lógica para saber se ainda tem mais itens no banco
-        // Se o total que temos na tela for menor que o total do banco, tem mais.
         this.hasNext = this.candidates.length < res.totalCount;
         
         this.isLoading = false;
@@ -86,10 +79,9 @@ export class CandidateListComponent implements OnInit {
     });
   }
 
-  // 3. Evento disparado pelo botão do PO-UI
   onShowMore() {
-    this.page++; // Incrementa a página
-    this.loadData(true); // Chama passando true para concatenar
+    this.page++;
+    this.loadData(true);
   }
 
   private onCreate() { 
@@ -113,7 +105,6 @@ export class CandidateListComponent implements OnInit {
     this.candidateService.disable(id).subscribe({
       next: () => {
         this.poNotification.success('Candidato inativado com sucesso!');
-        // Ao excluir, recarregamos do zero para garantir consistência
         this.loadData(false); 
       },
       error: () => {

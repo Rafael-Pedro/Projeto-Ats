@@ -34,6 +34,12 @@ export class AppComponent {
       link: '/candidates',
       icon: 'po-icon-user',
       shortLabel: 'Candidatos'
+    },
+    {
+      label: 'Vagas',
+      link: '/jobs',
+      icon: 'po-icon-briefcase',
+      shortLabel: 'Vagas'
     }
   ];
 }

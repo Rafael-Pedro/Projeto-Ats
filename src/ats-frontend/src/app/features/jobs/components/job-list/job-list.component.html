@@ -1,0 +1,44 @@
+<po-page-list 
+  p-title="Vagas" 
+  p-subtitle="Gestão de oportunidades"
+  [p-actions]="pageActions">
+
+  <div class="po-row po-mb-2 po-align-center">
+    
+    <div class="po-md-4 po-text-right">
+       <po-switch
+        name="profileSwitcher"
+        p-label-on="Visão: Recrutador"
+        p-label-off="Visão: Candidato"
+        [(ngModel)]="isRecruiter" 
+        (p-change)="onChangeProfile()">
+      </po-switch>
+    </div>
+
+    <div class="po-md-8" *ngIf="!isRecruiter">
+      <po-combo
+        name="candidateSelector"
+        p-label="Simular como o Candidato:"
+        p-placeholder="Selecione um candidato para testar..."
+        [p-filter-service]="candidateServiceUrl" 
+        p-field-label="name"
+        p-field-value="id"
+        [ngModel]="selectedCandidateId"
+        (p-change)="onCandidateChange($event)"
+        p-clean="true">
+      </po-combo>
+    </div>
+
+  </div>
+
+  <po-table
+    [p-loading]="isLoading"
+    [p-columns]="columns"
+    [p-items]="jobs"
+    [p-hide-columns-manager]="true"
+    [p-actions]="tableActions"
+    [p-actions-right]="true"
+    [p-striped]="true">
+  </po-table>
+  
+  </po-page-list>

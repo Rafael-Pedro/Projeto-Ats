@@ -1,0 +1,43 @@
+<po-page-edit
+  [p-title]="isEditing ? 'Editar Vaga' : 'Nova Vaga'"
+  [p-breadcrumb]="breadcrumb"
+  [p-disable-submit]="form.invalid || isLoading"
+  (p-save)="save()"
+  (p-cancel)="cancel()">
+
+  <form [formGroup]="form">
+    <div class="po-row">
+      
+      <po-input
+        class="po-md-8"
+        formControlName="title"
+        p-label="Título da Vaga"
+        p-placeholder="Ex: Desenvolvedor .NET Senior"
+        p-clean="true"> 
+      </po-input>
+
+      <po-decimal
+        class="po-md-4"
+        formControlName="salary"
+        p-label="Salário Mensal (Opcional)"
+        p-placeholder="0,00"
+        [p-decimals-length]="2"
+        p-icon="po-icon-finance">
+      </po-decimal>
+
+    </div>
+
+    <div class="po-row">
+      
+      <po-textarea
+        class="po-md-12"
+        formControlName="description"
+        p-label="Descrição da Vaga"
+        p-placeholder="Descreva as responsabilidades..."
+        [p-rows]="6">
+      </po-textarea>
+
+    </div>
+  </form>
+
+</po-page-edit>
