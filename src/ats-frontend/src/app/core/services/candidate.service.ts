@@ -3,14 +3,14 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Candidate } from '../models/candidate.model';
 import { PagedResult } from '../models/paged-result.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
     providedIn: 'root'
 })
 export class CandidateService {
     private readonly _http = inject(HttpClient);
-
-    private readonly _apiUrl = 'https://localhost:7187/api/candidates';
+    private _apiUrl = `${environment.apiUrl}/candidates`;
 
     /**
      * Busca candidatos paginados
