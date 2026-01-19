@@ -27,16 +27,17 @@ public class GetAllCandidatesQueryHandler : IRequestHandler<GetAllCandidatesQuer
             candidate.Name,
             candidate.Email,
             candidate.Age,
-            candidate.Resume,
+            candidate.LinkedInProfile,
+            candidate.ResumeFileName,
             candidate.CreatedAt,
             candidate.IsDeleted
         ));
 
         var response = new PagedResult<GetAllCandidatesQueryResponse>(
-        dtos,
-        pagedCandidates.TotalCount,
-        pagedCandidates.Page,
-        pagedCandidates.PageSize
+            dtos,
+            pagedCandidates.TotalCount,
+            pagedCandidates.Page,
+            pagedCandidates.PageSize
         );
 
         return Result.Ok(response);
@@ -48,7 +49,8 @@ public record GetAllCandidatesQueryResponse(
     string Name,
     string Email,
     int Age,
-    string? Resume,
+    string? LinkedIn,
+    string? ResumeFileName,
     DateTime CreatedAt,
     bool IsDeleted
 );

@@ -7,9 +7,11 @@ public class Candidate : Entity
     public string Name { get; private set; }
     public string Email { get; private set; }
     public int Age { get; private set; }
-    public string? Resume { get; private set; }
+    public string? LinkedInProfile { get; private set; }
+    public byte[]? ResumeFile { get; private set; }
+    public string? ResumeFileName { get; private set; }
 
-    public Candidate(string name, string email, int age, string? resume) : base()
+    public Candidate(string name, string email, int age, string? linkedInProfile, byte[]? resumeFile, string? resumeFileName) : base()
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new DomainException("O nome não pode estar vazio.");
@@ -23,15 +25,27 @@ public class Candidate : Entity
         Name = name;
         Email = email;
         Age = age;
-        Resume = resume;
+        LinkedInProfile = linkedInProfile;
+        ResumeFile = resumeFile;
+        ResumeFileName = resumeFileName;
     }
 
-    public void UpdateInfo(string name, string email, int age, string? resume)
+    public void UpdateInfo(string name, string email, int age, string? linkedInProfile)
     {
         Name = name;
         Email = email;
         Age = age;
-        Resume = resume;
+        LinkedInProfile = linkedInProfile;
+        UpdateTimestamp();
+    }
+
+    public void UploadResume(byte[] fileContent, string fileName)
+    {
+        if (fileContent == null || fileContent.Length == 0)
+            throw new DomainException("O arquivo está vazio.");
+
+        ResumeFile = fileContent;
+        ResumeFileName = fileName;
         UpdateTimestamp();
     }
 }

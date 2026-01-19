@@ -10,7 +10,9 @@ public record UpdateCandidateCommand(
     string? Name,
     string? Email,
     int? Age,
-    string? Resume
+    string? LinkedIn,
+    byte[]? ResumeFile,
+    string? ResumeFileName
 ) : IRequest<Result>;
 
 public class UpdateCandidateCommandHandler : IRequestHandler<UpdateCandidateCommand, Result>
@@ -32,10 +34,15 @@ public class UpdateCandidateCommandHandler : IRequestHandler<UpdateCandidateComm
             request.Name ?? candidate.Name,
             request.Email ?? candidate.Email,
             request.Age ?? candidate.Age,
-            request.Resume ?? candidate.Resume
+            request.LinkedIn ?? candidate.LinkedInProfile
         );
 
-        await _candidateRepository.UpdateAsync(candidate);
+        if (request.ResumeFile != null && request.ResumeFile.Length > 0)
+        {
+            candidate.UploadResume(request.ResumeFile, request.ResumeFileName!);
+        }
+
+        await _candidateRepository.UpdateAsync(candidate, cancellationToken);
         return Result.Ok();
     }
 }

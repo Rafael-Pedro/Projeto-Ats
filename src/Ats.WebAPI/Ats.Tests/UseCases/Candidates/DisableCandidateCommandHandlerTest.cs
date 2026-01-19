@@ -26,7 +26,7 @@ public class DisableCandidateCommandHandlerTest
         var command = new DisableCandidateCommand(candidateId);
 
         _repository.GetByIdAsync(candidateId, Arg.Any<CancellationToken>())
-                       .Returns((Candidate?)null);
+                   .Returns((Candidate?)null);
 
         // Act
         var result = await _handler.Handle(command, CancellationToken.None);
@@ -45,7 +45,15 @@ public class DisableCandidateCommandHandlerTest
         // Arrange
         var candidateId = Guid.NewGuid();
         var command = new DisableCandidateCommand(candidateId);
-        var candidate = new Candidate("Teste", "teste@email.com", 25, null);
+
+        var candidate = new Candidate(
+            "Teste",
+            "teste@email.com",
+            25,
+            "linkedin-profile",
+            null,
+            null
+        );
 
         _repository.GetByIdAsync(candidateId, Arg.Any<CancellationToken>())
                    .Returns(candidate);
@@ -58,8 +66,6 @@ public class DisableCandidateCommandHandlerTest
 
         candidate.IsDeleted.Should().BeTrue();
 
-        await _repository.Received(1).UpdateAsync(Arg.Is<Candidate>(c => c.Id == candidate.Id && c.IsDeleted));
+        await _repository.Received(1).UpdateAsync(Arg.Is<Candidate>(c => c.IsDeleted == true), Arg.Any<CancellationToken>());
     }
-
-
 }

@@ -9,8 +9,10 @@ public record CreateCandidateCommand(
     string Name,
     string Email,
     int Age,
-    string? Resume
-    ) : IRequest<Result<CreateCandidateCommandResponse>>;
+    string? LinkedIn,
+    byte[]? ResumeFile,
+    string? ResumeFileName
+) : IRequest<Result<CreateCandidateCommandResponse>>;
 
 public class CreateCandidateCommandHandler : IRequestHandler<CreateCandidateCommand, Result<CreateCandidateCommandResponse>>
 {
@@ -23,11 +25,13 @@ public class CreateCandidateCommandHandler : IRequestHandler<CreateCandidateComm
 
     public async ValueTask<Result<CreateCandidateCommandResponse>> Handle(CreateCandidateCommand request, CancellationToken cancellationToken)
     {
-        var candidate = new Candidate(
+         var candidate = new Candidate(
             request.Name,
             request.Email,
             request.Age,
-            request.Resume
+            request.LinkedIn,
+            request.ResumeFile,
+            request.ResumeFileName
         );
 
         await _candidateRepository.AddAsync(candidate, cancellationToken);
@@ -38,5 +42,5 @@ public class CreateCandidateCommandHandler : IRequestHandler<CreateCandidateComm
     }
 }
 
+// 3. A Resposta
 public record CreateCandidateCommandResponse(Guid Id);
-

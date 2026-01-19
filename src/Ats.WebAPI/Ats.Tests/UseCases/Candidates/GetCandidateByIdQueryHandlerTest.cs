@@ -25,7 +25,15 @@ public class GetCandidateByIdQueryHandlerTest
         var candidateId = Guid.NewGuid();
         var query = new GetCandidateByIdQuery(candidateId);
 
-        var candidate = new Candidate("Candidato teste", "ct@email.com", 32, "Currículo teste");
+
+        var candidate = new Candidate(
+            "Candidato teste",
+            "ct@email.com",
+            32,
+            "https://linkedin.com/in/teste",
+            null,
+            "meu_curriculo.pdf"
+        );
 
         _repository.GetByIdAsync(candidateId, Arg.Any<CancellationToken>())
                    .Returns(candidate);
@@ -36,10 +44,15 @@ public class GetCandidateByIdQueryHandlerTest
         // Assert
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().NotBeNull();
+
         result.Value.Name.Should().Be(candidate.Name);
         result.Value.Email.Should().Be(candidate.Email);
         result.Value.Age.Should().Be(candidate.Age);
-        result.Value.Resume.Should().Be(candidate.Resume);
+
+        result.Value.LinkedIn.Should().Be(candidate.LinkedInProfile);
+
+        result.Value.ResumeFileName.Should().Be(candidate.ResumeFileName);
+
         result.Value.IsDeleted.Should().Be(candidate.IsDeleted);
 
         await _repository.Received(1).GetByIdAsync(candidateId, Arg.Any<CancellationToken>());

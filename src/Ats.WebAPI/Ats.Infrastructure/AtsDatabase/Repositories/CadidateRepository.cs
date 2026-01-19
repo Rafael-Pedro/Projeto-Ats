@@ -45,7 +45,7 @@ public class CadidateRepository : ICandidateRepository
         return candidate;
     }
 
-    public async Task UpdateAsync(Candidate candidate)
+    public async Task UpdateAsync(Candidate candidate, CancellationToken cancellationToken = default)
     {
         var filter = Builders<Candidate>.Filter.Eq(c => c.Id, candidate.Id);
         await _collection.ReplaceOneAsync(filter, candidate, new ReplaceOptions { IsUpsert = false });

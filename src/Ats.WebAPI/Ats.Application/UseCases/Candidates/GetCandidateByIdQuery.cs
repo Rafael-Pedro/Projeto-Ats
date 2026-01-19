@@ -1,13 +1,12 @@
 ﻿using Ats.Application.FluentResultExtensions;
-using Ats.Domain.Interfaces;
+using Ats.Domain.Interfaces; // Para NotFoundError
 using FluentResults;
 using Mediator;
 
 namespace Ats.Application.UseCases.Candidates;
 
-public record GetCandidateByIdQuery(
-    Guid Id
-    ) : IRequest<Result<GetCandidateByIdQueryResponse>>;
+public record GetCandidateByIdQuery(Guid Id) : IRequest<Result<GetCandidateByIdQueryResponse>>;
+
 public class GetCandidateByIdQueryHandler : IRequestHandler<GetCandidateByIdQuery, Result<GetCandidateByIdQueryResponse>>
 {
     private readonly ICandidateRepository _candidateRepository;
@@ -28,7 +27,8 @@ public class GetCandidateByIdQueryHandler : IRequestHandler<GetCandidateByIdQuer
             candidate.Name,
             candidate.Email,
             candidate.Age,
-            candidate.Resume,
+            candidate.LinkedInProfile,
+            candidate.ResumeFileName,
             candidate.CreatedAt,
             candidate.UpdatedAt,
             candidate.DeletedAt,
@@ -43,7 +43,8 @@ public record GetCandidateByIdQueryResponse(
     string Name,
     string Email,
     int Age,
-    string? Resume,
+    string? LinkedIn,
+    string? ResumeFileName,
     DateTime CreatedAt,
     DateTime? UpdatedAt,
     DateTime? DeletedAt,
