@@ -2,7 +2,7 @@
 using FluentResults;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Presentation.Serialization;
+namespace Ats.WebAPI.Serialization;
 
 public class HttpSerialization
 {
@@ -23,47 +23,59 @@ public class HttpSerialization
 
         if (firstError is ApplicationError applicationError)
         {
-            var validationProblemDetails = new ProblemDetails
+            var problemDetails = new ProblemDetails
             {
                 Detail = applicationError.Message,
                 Status = StatusCodes.Status403Forbidden,
-                Title = applicationError.Message
+                Title = "Forbidden"
             };
 
-            return new ObjectResult(validationProblemDetails) { StatusCode = StatusCodes.Status403Forbidden };
+            return new ObjectResult(problemDetails) { StatusCode = StatusCodes.Status403Forbidden };
         }
 
-        if (firstError is RequestValidationError validationError)
+        if (firstError is RequestValidationError requestValidationError)
         {
-            var validationProblemDetails = new ValidationProblemDetails(validationError.FieldReasonDictionary)
+            var validationProblemDetails = new ValidationProblemDetails(requestValidationError.FieldReasonDictionary)
             {
-                Detail = firstError.Message,
+                Detail = "One or more validation errors occurred.",
                 Status = StatusCodes.Status400BadRequest,
-                Title = "Validation error"
+                Title = "Validation Error"
             };
 
             return new ObjectResult(validationProblemDetails) { StatusCode = StatusCodes.Status400BadRequest };
         }
 
+        if (firstError is ValidationError domainValidationError)
+        {
+            var problemDetails = new ProblemDetails
+            {
+                Detail = domainValidationError.Message,
+                Status = StatusCodes.Status400BadRequest,
+                Title = "Business Rule Violation"
+            };
+
+            return new ObjectResult(problemDetails) { StatusCode = StatusCodes.Status400BadRequest };
+        }
+
         if (firstError is NotFoundError notFoundError)
         {
-            var validationProblemDetails = new ProblemDetails
+            var problemDetails = new ProblemDetails
             {
                 Detail = notFoundError.Message,
                 Status = StatusCodes.Status404NotFound,
-                Title = notFoundError.Message
+                Title = "Not Found"
             };
 
-            return new ObjectResult(validationProblemDetails) { StatusCode = StatusCodes.Status404NotFound };
+            return new ObjectResult(problemDetails) { StatusCode = StatusCodes.Status404NotFound };
         }
 
-        var problemDetails = new ProblemDetails
+        var internalErrorProblemDetails = new ProblemDetails
         {
             Detail = firstError?.Message,
             Status = StatusCodes.Status500InternalServerError,
-            Title = "Unhandled error",
+            Title = "Internal Server Error",
         };
 
-        return new ObjectResult(problemDetails) { StatusCode = StatusCodes.Status500InternalServerError };
+        return new ObjectResult(internalErrorProblemDetails) { StatusCode = StatusCodes.Status500InternalServerError };
     }
 }
