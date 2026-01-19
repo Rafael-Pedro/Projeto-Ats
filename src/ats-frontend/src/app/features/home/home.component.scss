@@ -1,0 +1,14 @@
+.dashboard-grid {
+  display: grid;
+  // Ajuste automático: Colunas de no mínimo 300px. Se a tela for menor, empilha.
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+  width: 100%; // Garante que o container use a largura disponível
+}
+
+// Estilização para garantir que o widget se comporte bem dentro do Grid
+po-widget {
+  height: 100%;
+  display: flex;       // Melhora o comportamento interno
+  flex-direction: column;
+}

@@ -25,8 +25,9 @@ export class AppComponent {
   readonly menus: Array<PoMenuItem> = [
     {
       label: 'Home',
-      link: '/',
-      icon: 'po-icon-home'
+      link: '/home',
+      icon: 'po-icon-home',
+      shortLabel: 'Home'
     },
     {
       label: 'Candidatos',
