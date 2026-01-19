@@ -1,8 +1,8 @@
-﻿using NSubstitute;
-using FluentAssertions;
+﻿using Ats.Application.UseCases.Candidates;
 using Ats.Domain.Entities;
-using Ats.Application.UseCases.Candidates;
-using static Ats.Domain.Entities.Candidate;
+using Ats.Domain.Interfaces;
+using FluentAssertions;
+using NSubstitute;
 
 namespace Ats.Tests.UseCases.Candidates;
 

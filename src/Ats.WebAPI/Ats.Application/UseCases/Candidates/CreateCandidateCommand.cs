@@ -1,7 +1,7 @@
-﻿using Mediator;
+﻿using Ats.Domain.Entities;
+using Ats.Domain.Interfaces;
 using FluentResults;
-using Ats.Domain.Entities;
-using static Ats.Domain.Entities.Candidate;
+using Mediator;
 
 namespace Ats.Application.UseCases.Candidates;
 

@@ -1,9 +1,9 @@
 ﻿using Ats.Application.UseCases.Candidates;
 using Ats.Domain.Common;
 using Ats.Domain.Entities;
+using Ats.Domain.Interfaces;
 using FluentAssertions;
 using NSubstitute;
-using static Ats.Domain.Entities.Candidate;
 
 namespace Ats.Tests.UseCases.Candidates;
 

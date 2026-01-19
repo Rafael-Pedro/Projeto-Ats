@@ -1,7 +1,7 @@
 ﻿using Ats.Application.FluentResultExtensions;
+using Ats.Domain.Interfaces;
 using FluentResults;
 using Mediator;
-using static Ats.Domain.Entities.Candidate;
 
 namespace Ats.Application.UseCases.Candidates;
 

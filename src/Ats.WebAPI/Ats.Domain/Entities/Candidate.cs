@@ -1,4 +1,5 @@
 ﻿using Ats.Domain.Common;
+using Ats.Domain.Exceptions;
 
 namespace Ats.Domain.Entities;
 
@@ -12,13 +13,13 @@ public class Candidate : Entity
     public Candidate(string name, string email, int age, string? resume) : base()
     {
         if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentException("O nome não pode estar vazio.", nameof(name));
+            throw new DomainException("O nome não pode estar vazio.");
 
         if (age < 18 || age > 65)
-            throw new ArgumentException("A idade deve estar entre 18 e 65 anos.", nameof(age));
+            throw new DomainException("A idade deve estar entre 18 e 65 anos.");
 
         if (!email.Contains('@'))
-            throw new ArgumentException("E-mail inválido.", nameof(email));
+            throw new DomainException("E-mail inválido.");
 
         Name = name;
         Email = email;
@@ -33,13 +34,5 @@ public class Candidate : Entity
         Age = age;
         Resume = resume;
         UpdateTimestamp();
-    }
-
-    public interface ICandidateRepository
-    {
-        Task AddAsync(Candidate candidate, CancellationToken cancellationToken = default);
-        Task UpdateAsync(Candidate candidate);
-        Task<Candidate?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
-        Task<PagedResult<Candidate>> GetAllPaginatedAsync(int page, int pageSize, CancellationToken ct = default);
     }
 }

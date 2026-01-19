@@ -1,8 +1,8 @@
 ﻿using Ats.Domain.Common;
 using Ats.Domain.Entities;
+using Ats.Domain.Interfaces;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using static Ats.Domain.Entities.Candidate;
 
 namespace Ats.Infrastructure.AtsDatabase.Repositories;
 
