@@ -1,15 +1,27 @@
 <po-page-list 
   p-title="Candidatos" 
-  p-subtitle="Gerencie os currículos e perfis dos candidatos"
+  p-subtitle="Listagem e gestão de currículos"
   [p-actions]="pageActions">
 
-<po-table
-  [p-loading]="isLoading"
-  [p-columns]="columns"
-  [p-items]="candidates"
-  [p-hide-columns-manager]="true"
-  [p-actions]="tableActions"
-  [p-actions-right]="true">
- </po-table>
+  <po-table
+    [p-loading]="isLoading"
+    [p-columns]="columns"
+    [p-items]="candidates"
+    [p-actions]="tableActions"
+    [p-actions-right]="true"
+    [p-hide-columns-manager]="true"
+    [p-striped]="true">
+  </po-table>
+
+  <div class="po-row po-mt-2 po-mb-4 po-text-center" *ngIf="hasNext">
+    <div class="po-offset-md-4 po-md-4">
+      <po-button
+        p-label="Carregar mais resultados"
+        (p-click)="onShowMore()"
+        [p-loading]="isLoading"
+        [p-disabled]="isLoading">
+      </po-button>
+    </div>
+  </div>
 
 </po-page-list>
