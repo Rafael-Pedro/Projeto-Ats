@@ -1,7 +1,7 @@
 ﻿using Ats.Application.UseCases.Candidates;
+using Ats.WebAPI.Serialization;
 using Mediator;
 using Microsoft.AspNetCore.Mvc;
-using Presentation.Serialization;
 
 namespace Ats.WebAPI.Controllers;
 
