@@ -49,8 +49,8 @@ public class DownloadCandidateResumeQueryHandlerTest
             "sem@email.com",
             25,
             "linkedin",
-            null, // <--- Sem bytes
-            null  // <--- Sem nome
+            null,
+            null
         );
 
         _repository.GetByIdAsync(candidateId, Arg.Any<CancellationToken>())
