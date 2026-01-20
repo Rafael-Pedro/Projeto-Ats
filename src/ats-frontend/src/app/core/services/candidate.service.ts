@@ -46,6 +46,12 @@ export class CandidateService {
         return response;
     }
 
+    downloadResume(id: string): Observable<Blob> {
+    return this._http.get(`${this._apiUrl}/${id}/resume`, {
+      responseType: 'blob'
+    });
+  }
+
     private toFormData(candidate: any, file: File | null): FormData {
     const formData = new FormData();
 

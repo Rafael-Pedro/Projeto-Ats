@@ -38,6 +38,12 @@ export class CandidateListComponent implements OnInit {
   ];
 
   readonly tableActions: Array<PoTableAction> = [
+    { 
+      label: 'Baixar Currículo', 
+      action: (row: Candidate) => this.onDownload(row), 
+      icon: 'po-icon-download', 
+      disabled: (row: Candidate) => !row.resumeFileName 
+    },
     { label: 'Editar', action: (row: Candidate) => this.onEdit(row), icon: 'po-icon-edit' },
     { label: 'Excluir', action: (row: Candidate) => this.onDelete(row), type: 'danger', icon: 'po-icon-delete' }
   ];
@@ -133,5 +139,40 @@ export class CandidateListComponent implements OnInit {
         this.poNotification.error('Não foi possível inativar o candidato.');
       }
     });
+  }
+
+  private onDownload(item: Candidate) {
+    if (!item.resumeFileName) {
+      this.poNotification.warning('Candidato sem currículo.');
+      return;
+    }
+
+    this.isLoading = true;
+
+    this.candidateService.downloadResume(item.id).subscribe({
+      next: (data: Blob) => {
+        this.downloadFile(data, item.resumeFileName!);
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error(err);
+        this.poNotification.error('Erro ao baixar o arquivo.');
+        this.isLoading = false;
+      }
+    });
+  }
+
+  private downloadFile(blob: Blob, fileName: string) {
+    const url = window.URL.createObjectURL(blob);
+    
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    
+    a.click();
+    
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
   }
 }
