@@ -7,6 +7,7 @@ namespace Ats.WebAPI.Controllers;
 
 [ApiController]
 [Route("api/job-applications")]
+[Produces("application/json")]
 public class JobApplicationsController : ControllerBase
 {
     private readonly ISender _sender;
@@ -17,6 +18,9 @@ public class JobApplicationsController : ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(typeof(ApplyToJobResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Apply([FromBody] ApplyToJobCommand command)
     {
         var result = await _sender.Send(command);
@@ -24,6 +28,7 @@ public class JobApplicationsController : ControllerBase
     }
 
     [HttpGet("job/{jobId:guid}")]
+    [ProducesResponseType(typeof(IEnumerable<GetApplicationsByJobResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetByJob([FromRoute] Guid jobId)
     {
         var query = new GetApplicationsByJobQuery(jobId);
@@ -32,6 +37,7 @@ public class JobApplicationsController : ControllerBase
     }
 
     [HttpGet("candidate/{candidateId:guid}")]
+    [ProducesResponseType(typeof(IEnumerable<GetApplicationsByCandidateResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetByCandidate([FromRoute] Guid candidateId)
     {
         var query = new GetApplicationsByCandidateQuery(candidateId);
@@ -40,6 +46,9 @@ public class JobApplicationsController : ControllerBase
     }
 
     [HttpPatch("{id:guid}/status")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> ChangeStatus([FromRoute] Guid id, [FromBody] string action)
     {
         var result = await _sender.Send(new ChangeApplicationStatusCommand(id, action));

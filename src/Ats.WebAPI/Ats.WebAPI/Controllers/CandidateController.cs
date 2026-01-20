@@ -1,4 +1,5 @@
 ﻿using Ats.Application.UseCases.Candidates;
+using Ats.Domain.Common;
 using Ats.WebAPI.Serialization;
 using Mediator;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,7 @@ namespace Ats.WebAPI.Controllers;
 
 [ApiController]
 [Route("api/candidates")]
+[Produces("application/json")]
 public class CandidateController : ControllerBase
 {
     private readonly ISender _sender;
@@ -17,6 +19,8 @@ public class CandidateController : ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(typeof(CreateCandidateCommandResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Create([FromForm] CreateCandidateRequest request)
     {
         byte[]? fileBytes = null;
@@ -45,6 +49,8 @@ public class CandidateController : ControllerBase
     }
 
     [HttpGet("{id:guid}")]
+    [ProducesResponseType(typeof(GetCandidateByIdQueryResponse), StatusCodes.Status200OK)] // Ajuste o tipo aqui
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetById([FromRoute] Guid id)
     {
         var query = new GetCandidateByIdQuery(id);
@@ -54,6 +60,9 @@ public class CandidateController : ControllerBase
     }
 
     [HttpGet("{id:guid}/resume")]
+    [Produces("application/octet-stream")]
+    [ProducesResponseType(typeof(FileStreamResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DownloadResume([FromRoute] Guid id)
     {
         var query = new DownloadCandidateResumeQuery(id);
@@ -68,6 +77,7 @@ public class CandidateController : ControllerBase
     }
 
     [HttpGet]
+    [ProducesResponseType(typeof(PagedResult<GetAllCandidatesQueryResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAll([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
     {
         var query = new GetAllCandidatesQuery(page, pageSize);
@@ -77,10 +87,13 @@ public class CandidateController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
+    [Consumes("multipart/form-data")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Update(
-    [FromRoute] Guid id,
-    [FromForm] UpdateCandidateRequest request
-)
+        [FromRoute] Guid id,
+        [FromForm] UpdateCandidateRequest request)
     {
         byte[]? fileBytes = null;
         string? fileName = null;
@@ -109,6 +122,8 @@ public class CandidateController : ControllerBase
     }
 
     [HttpDelete("{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Disable([FromRoute] Guid id)
     {
         var result = await _sender.Send(new DisableCandidateCommand(id));
@@ -117,18 +132,18 @@ public class CandidateController : ControllerBase
     }
 
     public record CreateCandidateRequest(
-    string Name,
-    string Email,
-    int Age,
-    string? LinkedIn,
-    IFormFile? ResumeFile
-);
+        string Name,
+        string Email,
+        int Age,
+        string? LinkedIn,
+        IFormFile? ResumeFile
+    );
 
     public record UpdateCandidateRequest(
-    string? Name,
-    string? Email,
-    int? Age,
-    string? LinkedIn,
-    IFormFile? ResumeFile
-);
+        string? Name,
+        string? Email,
+        int? Age,
+        string? LinkedIn,
+        IFormFile? ResumeFile
+    );
 }
